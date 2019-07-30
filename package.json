@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mandrill-api": "^1.0.45",
     "node-fetch": "^2.6.0"
   }
 }
