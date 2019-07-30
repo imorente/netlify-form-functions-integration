@@ -8,7 +8,7 @@ exports.handler = async (event, context) => {
 
   const { name, email } = JSON.parse(event.body).payload || {};
 
-  console.log("Sending email via mandrill");
+  console.log(`Sending email via mandrill to ${name} <${email}>`);
 
   return fetch("https://mandrillapp.com/api/1.0/messages/send.json", {
     headers: {
