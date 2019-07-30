@@ -6,10 +6,10 @@ exports.handler = async (event, context) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  console.log("Event body: " + event.body);
-  console.log("Context: " + context);
+  console.log("Event: " + JSON.stringify(event));
+  console.log("Context: " + JSON.stringify(context));
 
-  const { name, email, data = {} } = JSON.parse(event.body).payload || {};
+  const { name, email, data = {} } = JSON.parse(event.body);
 
   if (!email) {
     console.log("Missing email adress");
