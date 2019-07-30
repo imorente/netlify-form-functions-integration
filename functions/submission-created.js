@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
   mandrillClient.messages.send(
     { message: emailMessage },
     result => {
-      console.log(result);
+      console.log("Email sent:" + result);
     },
     err => {
       console.log("A mandrill error occurred: " + e.name + " - " + e.message);
