@@ -6,9 +6,11 @@ exports.handler = async (event, context) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const { name, email } = JSON.parse(event.body).payload || {};
+  const { name, email, data = {} } = JSON.parse(event.body).payload || {};
 
-  console.log(`Sending email via mandrill to ${name} <${email}>`);
+  console.log(
+    `Sending email to ${name} <${email}>. Data: ` + JSON.stringify(data)
+  );
 
   return fetch("https://mandrillapp.com/api/1.0/messages/send.json", {
     headers: {
