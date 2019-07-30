@@ -1,4 +1,3 @@
-const querystring = require("querystring");
 const fetch = require("node-fetch");
 
 exports.handler = async (event, context) => {
@@ -7,14 +6,9 @@ exports.handler = async (event, context) => {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const payload = JSON.parse(event.body).payload;
+  const { name, email, message } = JSON.parse(event.body).payload || {};
 
-  console.log("Payload: " + JSON.stringify(payload));
-
-  // When the method is POST, the name will no longer be in the event’s
-  // queryStringParameters – it’ll be in the event body encoded as a queryString
-  const params = querystring.parse(event.body);
-  const name = params.name || "World";
+  console.log("name: " + name);
 
   // Send greeting to Slack
   return fetch(process.env.SLACK_WEBHOOK_URL, {
