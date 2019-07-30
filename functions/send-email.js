@@ -1,4 +1,22 @@
 const fetch = require("node-fetch");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
+function signed(event) {
+  const signature = event.headers["x-webhook-signature"];
+  if (!signature) {
+    console.log("Missing x-webhook-signature");
+    return false;
+  }
+
+  const { sha256 } = jwt.verify(signature, process.env.JWS_SECRET);
+  const hash = crypto
+    .createHash("sha256")
+    .update(event.body)
+    .digest("hex");
+  console.log("hash: " + hash + ". sha:" + sha256);
+  return sha256 === hash;
+}
 
 exports.handler = async (event, context) => {
   // Only allow POST
@@ -9,10 +27,17 @@ exports.handler = async (event, context) => {
   console.log("Event: " + JSON.stringify(event));
   console.log("Context: " + JSON.stringify(context));
 
+  if (!signed(event)) {
+    console.log("Invalid signature");
+    return {
+      statusCode: 403
+    };
+  }
+
   const { name, email, data = {} } = JSON.parse(event.body);
 
   if (!email) {
-    console.log("Missing email adress");
+    console.log("Missing email address");
     return {
       statusCode: 422,
       body: "Missing email"
